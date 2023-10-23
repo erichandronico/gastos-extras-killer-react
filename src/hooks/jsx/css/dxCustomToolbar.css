@@ -1,0 +1,13 @@
+
+
+.custom-toolbar-button {
+    margin-right: 4px;
+    height: 35px;
+}
+
+.toolbar-separator-bajo {
+    width: 1px;
+    background-color: #ddd;
+    height: 30px;
+    margin: 0 20px;
+  }

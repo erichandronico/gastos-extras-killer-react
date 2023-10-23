@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.grid1
+{
+    /* float: left; */
+    margin-top: 10px;
+    padding-top: 0px;
+    padding-left: 20px;
+    padding-right: 10px;
+    color: #656565 !important;
+    font-weight: 300 !important;
+    font-size: 12px !important;
+}
+
+.grid1b
+{
+    /* float: left; */
+    /* font-family: ColfaxAI,helvetica,sans-serif; */
+    margin-top: 10px;
+    padding-top: 0px;
+    padding-left: 20px;
+    padding-right: 10px;
+    color: #000000 !important;
+    font-weight: 400 !important;
+    font-size: 12px !important;
+}
+
+.dx-datagrid {
+    background-color: transparent;
+}
+
+.dx-datagrid-headers {
+    color:black
+}
+
+/* .dx-widget, .dx-widget *, .dx-widget ::after, .dx-widget ::before, .dx-widget::after, .dx-widget::before {
+    background-color: transparent !important;
+}   */
+
+.grid1_altura {
+    height: 410px;
+}
+
+.fondo_blanco {
+    background-color: white;
+}
+
+.espacio-form {
+    padding-right: 2px;
+    padding-left: 2px;
+}
+
+/* .dx-loadpanel-wrapper {
+    z-index: 5 !important;
+} */
+
+.custom-toolbar-button {
+    margin-right: 4px;
+    height: 35px;
+}
+
+.toolbar-separator-bajo {
+    width: 1px;
+    background-color: #ddd;
+    height: 30px;
+    margin: 0 20px;
+  }

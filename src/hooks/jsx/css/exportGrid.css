@@ -1,0 +1,18 @@
+.custom-button {
+    background-color: white;
+    border-color: lightgray;
+    border-width: 1px;
+    border-style: solid;
+  }
+.custom-button:hover {
+    box-shadow: 0 0 0 1px lightgray;
+    background-color: #eee;
+}
+.custom-button[disabled] {
+  border-color: lightgray !important;
+  opacity: 0.5; /* Puedes ajustar la opacidad para el botón deshabilitado */
+}
+.discreet-badge {
+  background-color: #45a4f7;
+  color: white;
+}
