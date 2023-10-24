@@ -112,21 +112,25 @@ export const useDXCustomToolbar = (gridRef) => {
 
 
 
-
-    const CustomButton = useCallback( ({ title, disabled, onClick, children, badgeEnabled=false, cantidad=0 }) => {
-        return ( 
-            <button title={ title } disabled={ ( disabled ?? cantidad==0 ) } className="btn btn-light position-relative custom-button p-2 custom-toolbar-button mt-1 border rounded-md" onClick={ onClick } >
-                { children }
+    const CustomButton = useCallback(({ title, disabled, onClick, children, badgeEnabled = false, cantidad = 0 }) => {
+        return (
+            <button 
+                title={title} 
+                disabled={disabled ?? cantidad == 0} 
+                className="relative p-2 mt-1 bg-white border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md" 
+                onClick={onClick}>
+                {children}
                 {
                     cantidad > 0 &&
-                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill discreet-badge">
-                        { cantidad }
-                        <span className="visually-hidden">title</span>
+                    <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full text-xs px-2 py-0.5">
+                        {cantidad}
+                        <span className="sr-only">{title}</span>
                     </span>
                 }
             </button>
-        )
-    }, [])
+        );
+    }, []);
+    
 
 
     const CustomToolbar = ({ children, title, ComponentIcon, showModal }) => {
@@ -135,7 +139,7 @@ export const useDXCustomToolbar = (gridRef) => {
                 <div className="mt-2 ms-2 me-0 ps-2 pt-3 mb-1 flex justify-between items-center">
                     {!showModal && (
                         <div className="flex items-center space-x-4">
-                            <h4 className="flex font-medium text-lg mt-1">
+                            <h4 className="flex font-semibold text-xl text-stone-700 mt-1">
                                 {ComponentIcon} {title}
                             </h4>
                         </div>

@@ -5,27 +5,12 @@ import { format } from 'date-fns'
 import { AiOutlineFileExcel } from 'react-icons/ai'
 import { BsArrowRightShort, BsFiletypeCsv } from 'react-icons/bs'
 import { useFileContent } from './useFileContent'
-import { useEffect, useState } from 'react'
+
 
 
 export const useUploadExcel = () => {
 
-  const file                            = useFileContent();
-  const [uploadedData, setUploadedData] = useState({ loading: false, dataSource: [] });
-
-  useEffect(() =>  {
-    setUploadedData( anterior => ({...anterior, loading: file?.isLoading }) )
-  }, [file.isLoading])
-
-
-  useEffect( () => {
-      if (!file.content) return
-      setUploadedData( anterior => ({...anterior, loading: true }) )
-      const result = file.content
-      //LOGICAS DE subida
-      setUploadedData( anterior => ({...anterior, loading: false, dataSource: result }))   
-  }, [file.content])
-
+  const file  = useFileContent();
 
     const ExcelUploader = () => {
         return (
@@ -68,23 +53,11 @@ export const useUploadExcel = () => {
                   </div>
                 )}
               </div>
-              {/* Uncomment the below code if you want to use the button
-              <div className="pt-5">
-                <Button
-                  style={{ display: 'block' }}
-                  text={trans(uploadButtonText)}
-                  icon="fas fa-cloud-upload-alt"
-                  disabled={!importedData.hasAllRequiredKeys || (isFhoImport && !dimSelected)}
-                  onClick={uploadFn}
-                />
-              </div>
-              */}
             </div>
           </EditorLayout>
         );
       };
 
-      return { ExcelUploader, uploadedData, fechaCartola: file?.fechaCartola }
+      return { ExcelUploader, content: file?.content }
 
-
-}
+};
