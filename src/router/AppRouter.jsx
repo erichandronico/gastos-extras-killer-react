@@ -3,6 +3,7 @@ import LoginPage from "../LoginPage";
 import { useLoginCheck } from "../hooks/useLoginCheck";
 import { useMemo } from "react";
 import { LoadExcel } from "../components/LoadExcel/LoadExcel";
+import { CartolaHistorica } from "../components/CartolaHistorica/CartolaHistorica";
 
   
 
@@ -16,12 +17,13 @@ export const AppRouter = () => {
 
   return  (
     <Routes>
-        <Route path="/load-excel"       element={ <LoadExcel /> } />
+        <Route path="/load-excel"         element={ <LoadExcel /> } />
+        <Route path="/cartola-historica"  element={ <CartolaHistorica /> } />
         {/* <Route path="/main"             element={ <MainLayout /> } /> */}
-        <Route path="/login"            element={ <LoginPage /> } />
+        <Route path="/login"              element={ <LoginPage /> } />
         {/* <Route path="/settings"         element={ <Settings /> } />
         <Route path="/availabledates"   element={ <AvailableDates /> } />
         <Route path="/dimmanager"       element={ <DimManager /> } />*/}
-        <Route path="/*"                element={ <LoadExcel /> } /> 
+        <Route path="/*"                  element={ <LoadExcel /> } /> 
     </Routes>
 )}

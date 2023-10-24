@@ -112,6 +112,7 @@ export const useBankContentToJson = (content, format='xlsx') => {
 
     const itemCategories = useItemCategories()
     const [bankTc, setBankTc]   = useState(null)
+    const [reload, setReload]   = useState(null)
 
     useEffect( () => {
       if (!content) return 
@@ -125,12 +126,13 @@ export const useBankContentToJson = (content, format='xlsx') => {
 
       setBankTc({...itauTc, dataSource: itauTcWithCategory })
 
-    }, [content, itemCategories?.data])
+    }, [content, itemCategories?.data, reload])
 
     return {
       dataSource:     bankTc?.dataSource ?? [],
       fecha:          bankTc?.fecha ?? '',
       columnsCaption: bankTc?.captionHeader ?? [],
-      columns:        bankTc?.columns ?? []
+      columns:        bankTc?.columns ?? [],
+      refetch:        () => setReload( new Date() )
     }
 }

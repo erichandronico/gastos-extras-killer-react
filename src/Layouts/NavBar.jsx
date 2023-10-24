@@ -34,6 +34,11 @@ export const NavBar = () => {
                   Subir Cartola
               </Link>
             </li>
+            <li>
+              <Link to="/cartola-historica" className={ getItemStyle('/cartola-historica', location) } aria-current="page">
+                  Cartola Histórica
+              </Link>
+            </li>
             {/* <li>
               <Link to="/" className={ getItemStyle('/', location) }aria-current="page">
                   Ingresar Cartola
