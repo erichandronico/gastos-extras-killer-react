@@ -13,6 +13,9 @@ import { useItemCategories } from "../../hooks/queries/useItemCategory"
 import { useCartola, useCartolas } from "../../hooks/queries/useCartola"
 import { useNotifyRefetch } from "../../hooks/useNotifyRefetch"
 import Swal from "sweetalert2"
+import CartolaHistoricaChart from "./CartolaHistoricaChart"
+import { TremorTab } from "../../Layouts/TremorTab"
+import { TabPanel } from "@tremor/react"
 
 
 export const CartolaHistorica = () => {
@@ -82,67 +85,65 @@ export const CartolaHistorica = () => {
     <MainLayout>
       <Titulo texto={ trans('Cartola Histórica') } Icono={<FaHistory /> } />
 
+      <TremorTab tabList={['Cartola','Categoría vs Fecha']}>
 
-      <CustomToolbar title={`Cartola ${cartolaFilters.date ?? ''}`} ComponentIcon={<BsFileEarmarkSpreadsheet className="mt-1 ms-3 me-3" /> }>
-        <RefreshButton onClick={ refreshCartola } />
-        <SelectBox dataSource={cartolas?.data?.cartolas} valueExpr={"id"} displayExpr={"id"} className="mt-1 text-xs" onSelectionChanged={handleSelectCartola} value={ cartolaFilters?.id } />
-        <EnlargeButton />
-        <ColumnChooser />
-        <SearchPanel />
-        <CustomButton onClick={ handleSave } cantidad={cartolaQuery?.data?.dataSource?.length} >
-          <GiSave size={20} />
-        </CustomButton>
-      </CustomToolbar>
-      <DataGrid
-        ref={gridRef}
-        className="grid1"
-        dataSource={  cartolaQuery?.data?.dataSource }
-        columnAutoWidth={true}
-        height={height}
-        onRowUpdating={ handleUpdate }
-        pager={{ showPageSizeSelector: true, allowedPageSizes: [50, 100, 200], showInfo: true }}
-      >
-        <GroupPanel visible={true}  />  
-        <FilterPanel visible={true} />
-        {
-          cartolaQuery?.data?.columns?.map( c => <Column dataField={c} key={c} name={c} allowEditing={false} /> )
-        }
-        { (cartolaQuery?.data?.dataSource?.length > 0) &&
-          <Column key="cate" dataField="category" caption={trans("Categoría")} allowEditing={true} width={150} >
-            <Lookup dataSource={ categories?.data?.categories } valueExpr="_id" displayExpr="name" />
-          </Column>
-        }
-        <Summary>
-          <GroupItem
-            column="montoTotal"
-            summaryType="sum"
-            valueFormat="currency"
-            showInGroupFooter={true}
-            displayFormat="Total: {0}" />
-          <GroupItem
-            column="valorCuota"
-            summaryType="sum"
-            valueFormat="currency"
-            showInGroupFooter={false}
-            displayFormat="Tot.Cuota: {0}"
-            alignByColumn={true} />
-          {/* <GroupItem
-            column="TotalAmount"
-            summaryType="max"
-            valueFormat="currency"
-            showInGroupFooter={false}
-            alignByColumn={true} />
-          <GroupItem
-            column="TotalAmount"
-            summaryType="sum"
-            valueFormat="currency"
-            displayFormat="Total: {0}"
-            showInGroupFooter={true} /> */}
-        </Summary>
-        <SortByGroupSummaryInfo summaryItem="sum" />
+        <TabPanel>
 
-        <Editing allowUpdating={true} useIcons={true} mode="cell" />
-      </DataGrid>
+          <CustomToolbar title={`Cartola ${cartolaFilters.date ?? ''}`} ComponentIcon={<BsFileEarmarkSpreadsheet className="mt-1 ms-3 me-3" /> }>
+            <RefreshButton onClick={ refreshCartola } />
+            <SelectBox dataSource={cartolas?.data?.cartolas} valueExpr={"id"} displayExpr={"id"} className="mt-1 text-xs" onSelectionChanged={handleSelectCartola} value={ cartolaFilters?.id } />
+            <EnlargeButton />
+            <ColumnChooser />
+            <SearchPanel />
+            <CustomButton onClick={ handleSave } cantidad={cartolaQuery?.data?.dataSource?.length} >
+              <GiSave size={20} />
+            </CustomButton>
+          </CustomToolbar>
+          <DataGrid
+            ref={gridRef}
+            className="grid1"
+            dataSource={  cartolaQuery?.data?.dataSource }
+            columnAutoWidth={true}
+            height={height}
+            onRowUpdating={ handleUpdate }
+            pager={{ showPageSizeSelector: true, allowedPageSizes: [50, 100, 200], showInfo: true }}
+          >
+            <GroupPanel visible={true}  />  
+            <FilterPanel visible={true} />
+            {
+              cartolaQuery?.data?.columns?.map( c => <Column dataField={c} key={c} name={c} allowEditing={false} /> )
+            }
+            { (cartolaQuery?.data?.dataSource?.length > 0) &&
+              <Column key="cate" dataField="category" caption={trans("Categoría")} allowEditing={true} width={150} >
+                <Lookup dataSource={ categories?.data?.categories } valueExpr="_id" displayExpr="name" />
+              </Column>
+            }
+            <Summary>
+              <GroupItem
+                column="montoTotal"
+                summaryType="sum"
+                valueFormat="currency"
+                showInGroupFooter={true}
+                displayFormat="Total: {0}" />
+              <GroupItem
+                column="valorCuota"
+                summaryType="sum"
+                valueFormat="currency"
+                showInGroupFooter={false}
+                displayFormat="Tot.Cuota: {0}"
+                alignByColumn={true} />
+            </Summary>
+            <SortByGroupSummaryInfo summaryItem="sum" />
+
+            <Editing allowUpdating={true} useIcons={true} mode="cell" />
+          </DataGrid>
+
+
+        </TabPanel>
+        <TabPanel>
+          <CartolaHistoricaChart />
+        </TabPanel>
+      </TremorTab>
 
     </MainLayout>
   )
