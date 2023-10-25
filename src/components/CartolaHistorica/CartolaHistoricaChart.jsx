@@ -1,26 +1,9 @@
 
 import { Chart } from 'devextreme-react';
 import { useCategoryVsDate } from '../../hooks/queries/useCategoryVsDate';
-import { CommonSeriesSettings, Series, Title, ValueAxis, Legend, ArgumentAxis, SeriesTemplate, Tooltip } from 'devextreme-react/chart';
+import { CommonSeriesSettings, Title, ValueAxis, SeriesTemplate, Tooltip } from 'devextreme-react/chart';
 import { memo } from 'react';
-
-
-const tooltipFn = ({argumentText, seriesName, value}) => {
-
-  return { html: `
-      <div>
-        <div class='text-md font-semibold'>${ argumentText }</div>
-        <div>
-          ${ seriesName }: ${parseInt(value/1000)}K
-        </div>
-      </div>`
-    }
-}
-
-const onPointClickfn  = ({target}) => target.select()
-const onLegendClickFn = ({target}) => target?.isVisible() ? target.hide() : target.show()
-
-
+import { onPointClickfn, toggleLegendVisibility, tooltipFn } from '../../helpers/dxUtils';
 
 const CartolaHistoricaChart = () => {
 
@@ -35,7 +18,7 @@ const CartolaHistoricaChart = () => {
         legend={{ visible: true, verticalAlignment: 'top', horizontalAlignment: 'center', itemTextPosition: "right", orientation: 'horizontal', position: 'outside', font: { size: 10 } }}
         commonPaneSettings={{ border: { visible: true, width: 1, top: false, right: false, left: false, bottom: true } }}
         onPointClick={ onPointClickfn }
-        onLegendClick={ onLegendClickFn }
+        onLegendClick={ toggleLegendVisibility }
         >
         <CommonSeriesSettings type="bar" argumentField="category" valueField='total' />
         <SeriesTemplate nameField='date' />

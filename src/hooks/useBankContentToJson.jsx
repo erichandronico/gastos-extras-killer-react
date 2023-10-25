@@ -1,8 +1,8 @@
 import _ from "lodash";
 import { useEffect, useState } from "react";
 import * as XLSX from 'xlsx';
-import { serialToDate } from '../../helpers/fechas';
-import { useItemCategories } from "../queries/useItemCategory";
+import { serialToDate } from '../helpers/fechas';
+import { useItemCategories } from "./queries/useItemCategory";
 
 
 
@@ -118,10 +118,11 @@ export const useBankContentToJson = (content, format='xlsx') => {
       if (!content) return 
 
       const itauTc = getDataFrom['itauTc']( content, 'Lugar de operación' )
-      const getCategory = itemCategories?.data?.getItemCategoryByName
+      const getCategory = itemCategories?.data?.getItemCategoryByNameAndCode
 
       const itauTcWithCategory = itauTc?.dataSource?.map( i => {
-        return { ...i,  category: getCategory(i?.descripcion)?.category }
+        const {referencia, category, importance} = getCategory( i?.descripcion, i?.codigoReferencia ) ?? { referencia: '', category: '', importance: ''}
+        return { ...i, referencia, category, importance }
       })
 
       setBankTc({...itauTc, dataSource: itauTcWithCategory })

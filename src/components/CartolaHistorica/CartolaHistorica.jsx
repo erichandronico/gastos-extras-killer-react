@@ -12,10 +12,10 @@ import { GiSave } from 'react-icons/Gi'
 import { useItemCategories } from "../../hooks/queries/useItemCategory"
 import { useCartola, useCartolas } from "../../hooks/queries/useCartola"
 import { useNotifyRefetch } from "../../hooks/useNotifyRefetch"
-import Swal from "sweetalert2"
 import CartolaHistoricaChart from "./CartolaHistoricaChart"
 import { TremorTab } from "../../Layouts/TremorTab"
 import { TabPanel } from "@tremor/react"
+import { CartolaHistoricaPie } from "./CArtolaHistoricaPie"
 
 
 export const CartolaHistorica = () => {
@@ -32,60 +32,21 @@ export const CartolaHistorica = () => {
   const { notifyResultado }           = useNotifyRefetch()
 
 
-
-
   const handleSave = useCallback( () => {
     const { dataSource } = gridRef?.current?.props ?? []
     const rest = { bank: 'itau', instance: 'default' }
     cartolaQuery.add.mutateAsync({...rest, date: cartolaQuery?.data?.fecha, cartola: dataSource }).then(notifyResultado)
   }, [gridRef?.current?.props?.dataSource])
 
-
-  const refreshCartola = useCallback( () => 
-    itemCategories.refetch().then( cartolaQuery.refetch() )
-  , [])
-
-
-  const handleSelectCartola = useCallback( ({selectedItem}) => {
-    setCartolaFilters(selectedItem)
-  } ,[])
+  const refreshCartola      = useCallback(() => itemCategories.refetch().then(cartolaQuery.refetch()), [])
+  const handleSelectCartola = useCallback(({selectedItem}) => setCartolaFilters(selectedItem), [])
   
-
-
-  const handleUpdate = useCallback( async ({oldData, newData}) => {
-    const { descripcion } = oldData;
-    const { category }    = newData;
-
-    // Mostrar un cuadro de diálogo de confirmación
-    const result = await Swal.fire({
-      title: 'Confirmación',
-      text: '¿Deseas guardar el cambio para todos los registros?',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'No',
-    });
-
-
-    // Verificar la respuesta del usuario
-    if (result.isConfirmed) {
-      // Si el usuario confirma, realizar la actualización en todos los registros
-      itemCategories.add.mutateAsync({ instance: 'default', name: descripcion, category }).then(notifyResultado);
-    } else {
-      // Si el usuario cancela, no hacer nada o mostrar un mensaje de cancelación
-      Swal.fire('Cancelado', 'Los cambios no se guardaron para todos los registros.', 'info');
-    }
-
-    // itemCategories.add.mutateAsync( { instance: 'default', name: descripcion, category }).then(notifyResultado)
-  }, [])
-
-
 
   return (
     <MainLayout>
       <Titulo texto={ trans('Cartola Histórica') } Icono={<FaHistory /> } />
 
-      <TremorTab tabList={['Cartola','Categoría vs Fecha']}>
+      <TremorTab tabList={['Cartola','Categoría vs Fecha', 'Pie']}>
 
         <TabPanel>
 
@@ -105,7 +66,7 @@ export const CartolaHistorica = () => {
             dataSource={  cartolaQuery?.data?.dataSource }
             columnAutoWidth={true}
             height={height}
-            onRowUpdating={ handleUpdate }
+            onRowUpdating={ itemCategories.handleUpdate }
             pager={{ showPageSizeSelector: true, allowedPageSizes: [50, 100, 200], showInfo: true }}
           >
             <GroupPanel visible={true}  />  
@@ -142,6 +103,9 @@ export const CartolaHistorica = () => {
         </TabPanel>
         <TabPanel>
           <CartolaHistoricaChart />
+        </TabPanel>
+        <TabPanel>
+          <CartolaHistoricaPie />
         </TabPanel>
       </TremorTab>
 

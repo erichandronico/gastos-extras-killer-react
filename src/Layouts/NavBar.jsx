@@ -30,13 +30,18 @@ export const NavBar = () => {
         <div className={`${isMenuOpen ? 'block' : 'hidden'} w-full md:block md:w-auto`} id="navbar-default">
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             <li>
-              <Link to="/load-excel" className={ getItemStyle('/availabledates', location) } aria-current="page">
+              <Link to="/load-excel" className={ getItemStyle('/load-excel', location) } aria-current="page">
                   Subir Cartola
               </Link>
             </li>
             <li>
               <Link to="/cartola-historica" className={ getItemStyle('/cartola-historica', location) } aria-current="page">
                   Cartola Histórica
+              </Link>
+            </li>
+            <li>
+              <Link to="/category-manager" className={ getItemStyle('/category-manager', location) } aria-current="page">
+                  Categorías
               </Link>
             </li>
             {/* <li>

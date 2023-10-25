@@ -29,9 +29,15 @@ const fetchData = async (categories) => {
             return objetoResultado;
         });
 
-        console.log('dxFormat', dxFormat)
+        // console.log('dxFormat', dxFormat)
+
+        const pieFormat = _.map(datosAgrupados, (values,key) => (
+            {
+                category: key,
+                total: _.sumBy(values, 'total')
+            }))
     
-        return { categoryVsDate, dxFormat  }
+        return { categoryVsDate, dxFormat, pieFormat  }
         
     } catch (error) {
         console.log(error)
