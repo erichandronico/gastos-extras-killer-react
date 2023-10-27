@@ -14,8 +14,6 @@ const fetchData = async () => {
     const itemCategoriesByName = _.keyBy( data?.dataSource?.filter( d => !d?.codigoReferencia), 'name' )
     const itemCategoriesByCode = _.keyBy( data?.dataSource, 'codigoReferencia' )
 
-    console.log('itemCategoriesByCode', itemCategoriesByCode, itemCategoriesByName)
-
     const getItemCategoryByName = name => _.get( itemCategoriesByName, name )
 
     const getItemCategoryByNameAndCode = (name, codigoReferencia=null) => {
@@ -48,21 +46,17 @@ export const useItemCategories = () => {
 
     const handleUpdate = useCallback( async ({oldData, newData}) => {
         const { descripcion, codigoReferencia, montoOperacion } = oldData;
-        const { category }    = newData;
         
         const result = await Swal.fire({    // Mostrar un cuadro de diálogo de confirmación
-          title: 'Confirmación',
+          title: '¿Registro General?',
           text: '¿Deseas guardar el cambio para todos los registros con igual descripción?',
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonText: 'Sí',
-          cancelButtonText: 'No',
-        });
+          icon: 'question', showCancelButton: true, confirmButtonText: 'Sí', cancelButtonText: 'No' });
     
         if (result.isConfirmed) {
-          return add.mutateAsync({ instance: 'default', name: descripcion, category }).then(notifyResultado);
+          return add.mutateAsync({ instance: 'default', name: descripcion, ...newData }).then(notifyResultado);
         } 
-        add.mutateAsync({ instance: 'default', name: descripcion, category, codigoReferencia, montoOperacion }).then(notifyResultado);
+        
+        add.mutateAsync({ instance: 'default', name: descripcion, codigoReferencia, montoOperacion, ...newData }).then(notifyResultado);
         Swal.fire('Categoría Asociada al Código', 'La categoría fue guardada solo para este código de referencia.', 'info');
       }, [])
 

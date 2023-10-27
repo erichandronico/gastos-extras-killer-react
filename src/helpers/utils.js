@@ -1,6 +1,5 @@
 import {camelCase, kebabCase, lowerCase, snakeCase, startCase, upperCase, upperFirst} from 'lodash';
 
-
 export const trans =  (txt='') => txt
 
 
@@ -47,3 +46,8 @@ export default class StringUtility {
     }
     
   }
+
+export const currencyFormatter = new Intl.NumberFormat('es-CL', {
+    style: 'currency',
+    currency: 'CLP',
+  });

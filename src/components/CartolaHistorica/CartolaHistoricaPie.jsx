@@ -1,7 +1,8 @@
 import { PieChart } from "devextreme-react"
 import { Font, Legend, Series, Title, Tooltip } from "devextreme-react/pie-chart"
 import { useCategoryVsDate } from "../../hooks/queries/useCategoryVsDate"
-import { toggleLegendVisibility, tooltipFn } from "../../helpers/dxUtils"
+import { customizeTooltipPie, toggleLegendVisibility } from "../../helpers/dxUtils"
+
 
 const onLegendClick = ({component,target}) => toggleLegendVisibility( {target: component.getAllSeries()[0].getPointsByArg(target)[0]} )
 
@@ -22,10 +23,7 @@ export const CartolaHistoricaPie = () => {
             type="doughnut" 
             argumentField="category" 
             valueField='total' />
-
-        {/* <ValueAxis position="left" title="$CLP" /> */}
-        <Tooltip customizeTooltip={ tooltipFn } />
-        {/* <SeriesTemplate nameField='total' /> */}
+        <Tooltip customizeTooltip={ customizeTooltipPie } enabled={true} />
         <Legend 
             visible={true}
             verticalAlignment="top"

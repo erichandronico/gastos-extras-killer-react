@@ -7,7 +7,17 @@ const fetchData = async () => {
     const data = await setGet('categories')
     const dataById = _.keyBy( data?.dataSource, '_id')
     const getCategoryById = _id => _.get( dataById, _id)
-    return { categories: data?.dataSource ?? [], getCategoryById }
+
+    const excluded = data?.dataSource?.filter( d => d?.excluded ).map( ({_id}) => (_id))
+
+    const filterExcluded = (array, categoryField="id") => {
+        return array.filter( i => {
+        //   return  !i[categoryField]?.includes(excluded)
+          return  !excluded?.includes(i[categoryField])
+        } )
+    }
+    
+    return { categories: data?.dataSource ?? [], getCategoryById, filterExcluded }
 }
 
 export const useCategories = () => {

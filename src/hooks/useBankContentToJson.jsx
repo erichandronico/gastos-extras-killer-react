@@ -89,10 +89,10 @@ const getJsonFromEstadoTcNacionalItau = (result, matchContent, matchFechaCartola
     }, []);
 
     return { 
-      dataSource: dataSource.filter( item =>  _.get(item, 'valorCuota')),
+      dataSource: dataSource.filter( item =>  ( _.get(item, 'valorCuota') > 0 && _.get(item, 'cuota') > 0 ) ),
+      columns,
       fecha: serialToDate( sheetData[fechaRowIndex].at(1) ), 
       captionHeader, 
-      columns 
     };
   } catch (error) {
     console.log(error)
@@ -130,10 +130,12 @@ export const useBankContentToJson = (content, format='xlsx') => {
     }, [content, itemCategories?.data, reload])
 
     return {
-      dataSource:     bankTc?.dataSource ?? [],
+      data: {
+        dataSource:     bankTc?.dataSource ?? [],
+        columns:        bankTc?.columns ?? [],
+      },
       fecha:          bankTc?.fecha ?? '',
       columnsCaption: bankTc?.captionHeader ?? [],
-      columns:        bankTc?.columns ?? [],
       refetch:        () => setReload( new Date() )
     }
 }

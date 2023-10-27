@@ -61,6 +61,7 @@ export const CategoryManager = () => {
           <Column dataField="importance" caption="Importancia"  allowEditing={true} >
             <Lookup dataSource={importanceList} />
           </Column>
+          <Column dataField="excluded" caption="Excluír" allowEditing={true} dataType="boolean" />
           <Editing allowUpdating={true} allowDeleting={true} useIcons={true} mode="form" />
           
         </DataGrid>

@@ -6,7 +6,7 @@ import './css/dxCustomToolbar.css'
 import { MdDeselect } from "react-icons/md"
 import { TbArrowAutofitHeight } from "react-icons/tb"
 
-const defaultHeights = [505, 825, 1150, 1450]
+const defaultHeights = [950, 1400, 2000]
 
 export const useDXCustomToolbar = (gridRef) => {
 

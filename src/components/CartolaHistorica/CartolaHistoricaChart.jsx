@@ -1,7 +1,7 @@
 
 import { Chart } from 'devextreme-react';
 import { useCategoryVsDate } from '../../hooks/queries/useCategoryVsDate';
-import { CommonSeriesSettings, Title, ValueAxis, SeriesTemplate, Tooltip } from 'devextreme-react/chart';
+import { CommonSeriesSettings, Title, ValueAxis, SeriesTemplate, Tooltip, ArgumentAxis } from 'devextreme-react/chart';
 import { memo } from 'react';
 import { onPointClickfn, toggleLegendVisibility, tooltipFn } from '../../helpers/dxUtils';
 
@@ -30,6 +30,7 @@ const CartolaHistoricaChart = () => {
           precision={0} 
           customizeTooltip={ tooltipFn }
         />
+        <ArgumentAxis hoverMode='allArgumentPoints' label={{ displayMode: 'rotate'}}/>
         <Title text="Gráfico de Cartola Histórica" />
       </Chart>
       );

@@ -1,6 +1,8 @@
 
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { setGet, setNew } from "../../helpers/fetchData"
+import { useItemCategories } from "./useItemCategory"
+import _ from "lodash"
 
 const endpoint  = 'cartola'
 const addData   = setNew(endpoint)
@@ -17,7 +19,7 @@ const columns = [
     'valorCuota'
   ]
 
-const fetchData = async ({instance, date, bank}) => {
+const fetchData = async ({instance, date, bank, itemCategories}) => {
     const query = {}
     if (instance) query.instance    = instance
     if (bank) query.bank            = bank
@@ -25,14 +27,25 @@ const fetchData = async ({instance, date, bank}) => {
 
     const data = await setGet(endpoint, query)
 
-    return { dataSource: data?.dataSource ?? [], fecha: date, columns }
+    const getCategory = itemCategories?.data?.getItemCategoryByNameAndCode
+
+    const itauTcWithCategory = data?.dataSource?.map( i => {
+        const {referencia, category, importance} = getCategory( i?.descripcion, i?.codigoReferencia ) ?? { referencia: '', category: '', importance: ''}
+        return { ...i, referencia, category, importance }
+      })
+
+    return { dataSource: itauTcWithCategory ?? [], fecha: date, columns }
 }
+
+
 
 export const useCartola = (instance='default',bank='null', date='null') => {
 
+    const itemCategories = useItemCategories()
+
     const data = useQuery(
-        [endpoint, instance, bank, date],
-        async () =>  await fetchData({instance, date, bank}),
+        [endpoint, instance, bank, date, itemCategories?.data?.dataSource],
+        async () =>  await fetchData({instance, date, bank, itemCategories}),
         {
            cacheTime: 1000*60*60 * 60 * 24, 
            staleTime: 1000*60*60 * 60 * 24 
@@ -47,15 +60,13 @@ export const useCartola = (instance='default',bank='null', date='null') => {
 }
 
 
-
 const fetchList = async ({instance, bank}) => {
     const query = {}
     if (instance) query.instance    = instance
     if (bank) query.bank            = bank
     const data = await setGet(`${endpoint}/list`, query)
-    return { cartolas: data?.cartolas ?? [] }
+    return { cartolas: _.sortBy(data?.cartolas) ?? [] }
 }
-
 
 export const useCartolas = (instance='default',bank=null) => {
 

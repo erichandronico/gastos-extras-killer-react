@@ -31,7 +31,8 @@ export const useUploadExcel = () => {
                     className=""
                     selectButtonText={trans('Buscar Archivo')}
                     labelText={trans('Suéltalo Aquí')}
-                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,text/plain"
+                    // accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,text/plain"
+                    accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,text/plain"
                     uploadMode="useForm"
                     disabled={false}
                     onValueChanged={file.fileUploadContentChange}
