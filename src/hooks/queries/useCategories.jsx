@@ -4,6 +4,7 @@ import { setGet } from "../../helpers/fetchData"
 import _ from "lodash"
 
 const fetchData = async () => {
+    
     const data = await setGet('categories')
     const dataById = _.keyBy( data?.dataSource, '_id')
     const getCategoryById = _id => _.get( dataById, _id)

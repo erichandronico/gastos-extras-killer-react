@@ -22,8 +22,7 @@ export const CartolaHistoricaGrid = () => {
     const cartolaQuery                  = useCartola('default', cartolaFilters?.bank, cartolaFilters?.date)
     const cartolas                      = useCartolas()
     const { notifyResultado }           = useNotifyRefetch()
-  
-  
+
     const handleSave = useCallback( () => {
       const { dataSource } = gridRef?.current?.props ?? []
       const rest = { bank: 'itau', instance: 'default' }
@@ -42,11 +41,10 @@ export const CartolaHistoricaGrid = () => {
     
   
   
-    const handleUpdate = useCallback( async ({oldData, newData}) => {
+const handleUpdate = useCallback(async ({ oldData, newData }) => {
       const { descripcion } = oldData;
-      const { category }    = newData;
+      const { categories } = newData; // Adaptado para manejar un arreglo de categorías
   
-      // Mostrar un cuadro de diálogo de confirmación
       const result = await Swal.fire({
         title: 'Confirmación',
         text: '¿Deseas guardar el cambio para todos los registros?',
@@ -56,17 +54,14 @@ export const CartolaHistoricaGrid = () => {
         cancelButtonText: 'No',
       });
   
-      // Verificar la respuesta del usuario
       if (result.isConfirmed) {
-        // Si el usuario confirma, realizar la actualización en todos los registros
-        itemCategories.add.mutateAsync({ instance: 'default', name: descripcion, category }).then(notifyResultado);
+        itemCategories.add.mutateAsync({ instance: 'default', name: descripcion, categories }).then(notifyResultado);
       } else {
-        // Si el usuario cancela, no hacer nada o mostrar un mensaje de cancelación
         Swal.fire('Cancelado', 'Los cambios no se guardaron para todos los registros.', 'info');
       }
-  
-      // itemCategories.add.mutateAsync( { instance: 'default', name: descripcion, category }).then(notifyResultado)
-    }, [])
+    }, []);
+
+
 
   return (
     <>
@@ -94,10 +89,19 @@ export const CartolaHistoricaGrid = () => {
             {
                 cartolaQuery?.data?.columns?.map( c => <Column dataField={c} key={c} name={c} allowEditing={false} /> )
             }
-            { (cartolaQuery?.data?.dataSource?.length > 0) &&
-                <Column key="cate" dataField="category" caption={trans("Categoría")} allowEditing={true} width={150} >
-                <Lookup dataSource={ categories?.data?.categories } valueExpr="_id" displayExpr="name" />
-                </Column>
+            {(cartolaQuery?.data?.dataSource?.length > 0) &&
+              <Column key="categories" dataField="categories" caption="Categorías" allowEditing={true} width={150}
+                cellRender={(cellData) => {
+                  const categoryNames = cellData.value.map(categoryId => {
+                    const category = categories?.data?.categories?.find(cat => cat._id === categoryId);
+                    return category ? category.name : '';
+                  }).join(', ');
+              
+                  return <span>{categoryNames}</span>;
+                }}
+                >
+                <Lookup dataSource={categories?.data?.categories} valueExpr="_id" displayExpr="name" />
+              </Column>
             }
             <Summary>
                 <GroupItem

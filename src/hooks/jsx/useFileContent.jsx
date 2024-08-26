@@ -18,8 +18,6 @@ export const useFileContent = () => {
           return;
         }
 
-        console.log('file.type', file.type)
-
         const isText = ( file.type.indexOf('text') > -1 )
         const isXlsx = ( file.type.indexOf('spreadsheetml') > -1 || file.type.indexOf('ms-excel') > 1 )
 

@@ -30,8 +30,8 @@ const fetchData = async ({instance, date, bank, itemCategories}) => {
     const getCategory = itemCategories?.data?.getItemCategoryByNameAndCode
 
     const itauTcWithCategory = data?.dataSource?.map( i => {
-        const {referencia, category, importance} = getCategory( i?.descripcion, i?.codigoReferencia ) ?? { referencia: '', category: '', importance: ''}
-        return { ...i, referencia, category, importance }
+        const {referencia, categories, importance} = getCategory( i?.descripcion, i?.codigoReferencia ) ?? { referencia: '', categories: [], importance: ''}
+        return { ...i, referencia, categories, importance }
       })
 
     return { dataSource: itauTcWithCategory ?? [], fecha: date, columns }
@@ -39,7 +39,7 @@ const fetchData = async ({instance, date, bank, itemCategories}) => {
 
 
 
-export const useCartola = (instance='default',bank='null', date='null') => {
+export const useCartola = (instance='default',bank=null, date=null) => {
 
     const itemCategories = useItemCategories()
 
@@ -48,7 +48,8 @@ export const useCartola = (instance='default',bank='null', date='null') => {
         async () =>  await fetchData({instance, date, bank, itemCategories}),
         {
            cacheTime: 1000*60*60 * 60 * 24, 
-           staleTime: 1000*60*60 * 60 * 24 
+           staleTime: 1000*60*60 * 60 * 24,
+           enabled: !!(itemCategories?.isFetched)
         }
     )
   
@@ -65,7 +66,10 @@ const fetchList = async ({instance, bank}) => {
     if (instance) query.instance    = instance
     if (bank) query.bank            = bank
     const data = await setGet(`${endpoint}/list`, query)
-    return { cartolas: _.sortBy(data?.cartolas) ?? [] }
+    // Ordena el arreglo por la clave `date`, asegurándote de que se convierte a un objeto `Date`
+    const sortedCartolas = _.sortBy(data?.cartolas, cartola => new Date(cartola.date));
+
+    return { cartolas: sortedCartolas ?? [] };
 }
 
 export const useCartolas = (instance='default',bank=null) => {

@@ -20,7 +20,6 @@ export const CartolaHistorica = () => {
   const cartolaQuery                  = useCartola('default', cartolaFilters?.bank, cartolaFilters?.date)
   const cartolas                      = useCartolas()
   const handleSelectCartola           = useCallback(({selectedItem}) => setCartolaFilters(selectedItem), [])
-  
 
   return (
     <MainLayout>

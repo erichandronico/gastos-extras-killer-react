@@ -10,10 +10,12 @@ const fetchData = async (categories, itemCategories) => {
     try {
         const query = {}
         const data = await setGet(endpoint, query)
-    
+        
+        const getCategoryById = categories?.data?.getCategoryById
+
         const categoryVsDate_ =
             data?.categoryVsDate?.map( i => {
-                const category = categories?.data?.getCategoryById(i?.category)?.name
+                const category = getCategoryById(i?.category)?.name
                 if (!category) return i
                 return { ...i, category, categoryId: i?.category }
             })
@@ -58,7 +60,8 @@ export const useCategoryVsDate = () => {
         async () =>  await fetchData(categories, itemCategories),
         {
            cacheTime: 1000*60*60 * 60 * 24, 
-           staleTime: 1000*60*60 * 60 * 24 
+           staleTime: 1000*60*60 * 60 * 24,
+           enabled: !!(categories.isFetched && itemCategories.isFetched)
         }
     )
   

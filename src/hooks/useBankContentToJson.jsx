@@ -121,8 +121,8 @@ export const useBankContentToJson = (content, format='xlsx') => {
       const getCategory = itemCategories?.data?.getItemCategoryByNameAndCode
 
       const itauTcWithCategory = itauTc?.dataSource?.map( i => {
-        const {referencia, category, importance} = getCategory( i?.descripcion, i?.codigoReferencia ) ?? { referencia: '', category: '', importance: ''}
-        return { ...i, referencia, category, importance }
+        const {referencia, categories, importance} = getCategory( i?.descripcion, i?.codigoReferencia ) ?? { referencia: '', category: '', importance: ''}
+        return { ...i, referencia, categories, importance }
       })
 
       setBankTc({...itauTc, dataSource: itauTcWithCategory })
@@ -133,8 +133,8 @@ export const useBankContentToJson = (content, format='xlsx') => {
       data: {
         dataSource:     bankTc?.dataSource ?? [],
         columns:        bankTc?.columns ?? [],
+        fecha:          bankTc?.fecha ?? ''
       },
-      fecha:          bankTc?.fecha ?? '',
       columnsCaption: bankTc?.captionHeader ?? [],
       refetch:        () => setReload( new Date() )
     }

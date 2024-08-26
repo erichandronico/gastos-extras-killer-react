@@ -19,7 +19,7 @@ export const CategoryManager = () => {
   const {CustomToolbar, RefreshButton, SearchPanel, ColumnChooser, EnlargeButton, height } = useDXCustomToolbar(gridRef)
 
   const itemCategories        = useItemCategories()
-  const categories            = useCategories()
+  const queryCategories       = useCategories()
     const { notifyResultado } = useNotifyRefetch()
 
   const handleUpdate = useCallback( ({oldData, newData}) => {
@@ -29,6 +29,45 @@ export const CategoryManager = () => {
   const handleRemove = useCallback( ({oldData}) => {
     itemCategories.del.mutateAsync(oldData).then(notifyResultado)
   } ,[])
+
+  const calculaCategoriesFilterExpr = ( filterValues ) => {
+
+    switch (typeof filterValues) {
+        
+        case 'object':  //Cuando el filtro es un array
+            return  ( {categories} ) => {
+                if (filterValues.length === 0) return true;
+                return ( categories.find( ({_id}) => filterValues.join(',').includes(_id.toString() ) ) !== undefined )
+
+            };
+
+        case 'string':
+            return  ( {categories} ) => {
+                if (filterValues.length === 0) return true;
+                return ( categories.find( ({_id}) => _id.includes(filterValues) ) !== undefined )
+                return  ( categories.find( f => f.includes(filterValues) ) !== undefined );
+            };
+    
+        default:
+            break;
+    }
+
+};
+
+  const handleOnEditorPreparing = useCallback( (e) => {
+    if ((e.parentType === "dataRow" || e.parentType === "filterRow") && e.dataField === "categories") {
+        e.editorName = "dxTagBox"
+        e.editorOptions.dataSource = queryCategories?.data?.categories
+        e.editorOptions.showSelectionControls = true;
+        e.editorOptions.displayExpr = "name";
+        e.editorOptions.valueExpr = "_id";
+        e.editorOptions.value = e.value || [];
+        e.editorOptions.onValueChanged =  ({value}) => {
+            e.setValue(value);
+        }
+    }
+
+  }, [queryCategories?.data])
 
   return (
     <MainLayout>
@@ -47,6 +86,7 @@ export const CategoryManager = () => {
           height={ height }
           onRowUpdating={ handleUpdate }
           onRowRemoving={ handleRemove }
+          onEditorPreparing={handleOnEditorPreparing}
          >
           <HeaderFilter visible={true} />
           <Column dataField="_id" visible={false} allowEditing={false} />
@@ -54,14 +94,37 @@ export const CategoryManager = () => {
           <Column dataField="name" caption="Descripción" allowEditing={false} />
           <Column dataField="codigoReferencia" allowEditing={false} />
           <Column dataField="montoOperacion" allowEditing={false} format="currency" />
-          <Column key="cate" dataField="category" caption={trans("Categoría")} allowEditing={true} width={150} >
-            <Lookup dataSource={ categories?.data?.categories } valueExpr="_id" displayExpr="name" />
-          </Column>
+          { queryCategories?.data?.categories &&
+            <Column
+                key="categories"
+                dataField="categories"
+                caption={trans("Categorías")}
+                allowEditing={true}
+                width={150}
+                calculateDisplayValue       = { ({categories}) => categories?.map( cid => queryCategories?.data?.getCategoryById(cid)?.name ).join(', ') }
+                calculateFilterExpression   = { (filterValues) => calculaCategoriesFilterExpr(filterValues) }
+                cellRender={(cellData) => {
+                    const badges = cellData.value.map(categoryId => {
+                        const category = queryCategories?.data?.categories?.find(cat => cat._id === categoryId);
+                        return category ? (
+                            <span
+                                key={categoryId}
+                                className="inline-block bg-gray-200 rounded-full px-2 py-1 text-xs font-semibold text-gray-700 mr-0 mb-0"
+                            >
+                                {category.name}
+                            </span>
+                        ) : null;
+                    });
+
+                    return <div>{badges}</div>;
+                }}
+            />
+          }
           <Column dataField="referencia" caption="Referencia Compra" allowEditing={true} />
           <Column dataField="importance" caption="Importancia"  allowEditing={true} >
             <Lookup dataSource={importanceList} />
           </Column>
-          <Column dataField="excluded" caption="Excluír" allowEditing={true} dataType="boolean" />
+          <Column dataField="excluded" caption="Excluído" allowEditing={true} dataType="boolean" />
           <Editing allowUpdating={true} allowDeleting={true} useIcons={true} mode="form" />
           
         </DataGrid>
