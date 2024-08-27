@@ -43,8 +43,12 @@ export const useItemCategories = () => {
     );
 
     const handleUpdate = useCallback(async ({ oldData, newData }) => {
-        const { descripcion, codigoReferencia, montoOperacion } = oldData;
-        console.log('newData', newData, { codigoReferencia})
+        const { descripcion, codigoReferencia } = oldData;
+
+        console.log('new Data', newData)
+        console.log('old Data', oldData)
+
+
         const result = await Swal.fire({
             title: '¿Registro General?',
             text: '¿Deseas guardar el cambio para todos los registros con igual descripción?',
@@ -66,9 +70,9 @@ export const useItemCategories = () => {
             instance: 'default',
             name: descripcion,
             codigoReferencia,
-            montoOperacion,
             ...newData
-        }).then(notifyResultado);
+        })  
+        .then(notifyResultado)
         
         Swal.fire('Categoría Asociada al Código', 'La categoría fue guardada solo para este código de referencia.', 'info');
     }, []);

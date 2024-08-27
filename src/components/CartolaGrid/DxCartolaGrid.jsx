@@ -26,7 +26,6 @@ export const DxCartolaGrid = ({ cartola, hystorySelector = false }) => {
     const handleSave = useCallback(() => {
         const { dataSource } = gridRef?.current?.props ?? [];
         const rest = { bank: 'itau', instance: 'default' };
-        console.log('handle save => rest', rest, { date: cartola?.data?.fecha }, { dataSource }, cartola)
         cartolaQuery.add.mutateAsync({ ...rest, date: cartola?.data?.fecha, cartola: dataSource }).then(notifyResultado);
     }, [gridRef?.current?.props?.dataSource, cartolaQuery?.data, cartola, itemCategories?.data]);
 
